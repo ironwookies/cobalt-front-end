@@ -1,0 +1,26 @@
+.body-container{
+    background: white;
+    width: 100%;
+    min-height: 650px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.body-graphic{
+    background: pink;
+    width: 40%;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+}
+.body-graphic img{
+    width: 450px;
+}
+
+.body-tag-line{
+    background: violet;
+    width: 40%;
+    height: 450px;
+}
+

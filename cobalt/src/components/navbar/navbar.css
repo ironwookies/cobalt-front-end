@@ -1,0 +1,69 @@
+.container{
+    background: #0047ab;
+    width: 100%;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper{
+    width: 80%;
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center
+}
+
+.logo{
+    width: auto;
+    height: 90px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center
+}
+
+.logo img{
+    width: 55px;
+}
+
+.cobalt{
+    font-family: 'Roboto';
+    font-size: 45px;
+    font-weight: bold;
+    color: #0496ff;
+}
+
+.links{
+    width: 180px;
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.links ul{
+    width: 100%;
+    height: 90px;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.links ul li{
+    background: #0496ff;
+    list-style: none;
+    padding: 10px 15px;
+    margin: 0px;
+    border-radius: 5px;
+}
+
+.link{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
