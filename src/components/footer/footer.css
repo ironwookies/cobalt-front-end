@@ -1,0 +1,21 @@
+.footer-container{
+    background: #00357e;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-wrapper{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-wrapper small{
+    font-family: 'Roboto';
+    color: white;
+}

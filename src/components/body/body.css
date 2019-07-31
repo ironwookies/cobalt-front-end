@@ -3,12 +3,11 @@
     width: 100%;
     min-height: 650px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
 }
 
 .body-graphic{
-    background: pink;
     width: 40%;
     height: 450px;
     display: flex;
@@ -19,8 +18,27 @@
 }
 
 .body-tag-line{
-    background: violet;
     width: 40%;
     height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-tag-line h1{
+    width: 100%;
+    font-size: 52px;
+    color:#0047ab;
+    font-family: 'Roboto';
+    font-weight: bold;
+    margin: -40px 0px 0px 0px;
+}
+
+.body-tag-line h1 span{
+    width: 100%;
+    font-size: 52px;
+    color: #0047ab;
+    font-family: 'Roboto';
+    font-weight: bold;
 }
 

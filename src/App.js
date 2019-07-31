@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from './components/home/Home';
+import Login from './components/login/Login';
+import Signup from './components/signup/Signup';
 
 import './App.css';
 
@@ -16,6 +18,12 @@ export default class App extends Component {
           <Switch>
             <Route exact path='/' render={()=>
               <Home />
+            }/>
+            <Route exact path='/login' render={()=>
+              <Login />
+            }/>
+            <Route exact path='/signup' render={()=>
+              <Signup />
             }/>
           </Switch>
       </div>
