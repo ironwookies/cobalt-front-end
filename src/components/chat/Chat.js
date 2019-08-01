@@ -8,10 +8,14 @@ export default class Chat extends Component {
 			username: '',
 			message: '',
 			messages: [],
+			socket: socketIOClient('http://192.168.125.9:3000', {
+				query: { _id: this.props.match.params.id },
+			}),
+			room: this.props.match.params.id,
 		};
-		this.socket = socketIOClient('http://192.168.125.9:3000');
+		// this.socket = socketIOClient('http://192.168.125.9:3000');
 
-		this.socket.on('RECEIVE_MESSAGE', (data) => {
+		this.state.socket.on('chat message', (data) => {
 			addMessage(data);
 		});
 
@@ -21,7 +25,7 @@ export default class Chat extends Component {
 
 		this.sendMessage = (e) => {
 			e.preventDefault();
-			this.socket.emit('SEND_MESSAGE', {
+			this.state.socket.emit('chat message', {
 				author: this.state.username,
 				message: this.state.message,
 			});
@@ -36,42 +40,6 @@ export default class Chat extends Component {
 		}
 		this.setState({ [e.target.name]: e.target.value });
 	};
-	// registerHandler = (onMessageReceived) => {
-	// 	socket.on('message', onMessageReceived);
-	// };
-
-	// unregisterHandler = () => {
-	// 	socket.off('message');
-	// };
-
-	// // socket.on('error', function (err) {
-	// // 	console.log('received socket error:')
-	// // 	console.log(err)
-	// // })
-
-	// register = (name, cb) => {
-	// 	socket.emit('register', name, cb);
-	// };
-
-	// join = (chatroomName, cb) => {
-	// 	socket.emit('join', chatroomName, cb);
-	// };
-
-	// leave = (chatroomName, cb) => {
-	// 	socket.emit('leave', chatroomName, cb);
-	// };
-
-	// message = (chatroomName, msg, cb) => {
-	// 	socket.emit('message', { chatroomName, message: msg }, cb);
-	// };
-
-	// getChatrooms = (cb) => {
-	// 	socket.emit('chatrooms', null, cb);
-	// };
-
-	// getAvailableUsers = (cb) => {
-	// 	socket.emit('availableUsers', null, cb);
-	// };
 
 	componentDidMount() {
 		// const { endpoint } = this.state;
@@ -80,16 +48,19 @@ export default class Chat extends Component {
 	}
 
 	render() {
+		console.log(this.props.match.params.id);
 		return (
 			<div className="card">
 				<div className="card-body">
-					<div className="card-title">Global Chat</div>
+					<div className="card-title">
+						Global Chat {this.props.match.params.id}
+					</div>
 					<hr />
 					<div className="messages">
 						{this.state.messages.map((message, i) => {
 							return (
 								<div key={i}>
-									<a>Author: {message.author}</a>
+									<h1>Author: {message.author}</h1>
 									<p>
 										<span>Message:</span>
 										{message.message}
