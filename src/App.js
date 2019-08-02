@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from './components/home/Home';
-import Chat from './components/chat/Chat';
+import ChatRooms from './components/chatGroups';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 
@@ -18,15 +18,11 @@ export default class App extends Component {
 			<div>
 				<Switch>
 					<Route exact path="/" render={() => <Home />} />
-					<Route exact path="/chat" render={() => <Chat />} />
-            <Route exact path='/login' render={()=>
-              <Login />
-            }/>
-            <Route exact path='/signup' render={()=>
-              <Signup />
-            }/>
-          </Switch>
-      </div>
-    )
-  }
+					<Route path="/chat" render={() => <ChatRooms />} />
+					<Route exact path="/login" render={() => <Login />} />
+					<Route exact path="/signup" render={() => <Signup />} />
+				</Switch>
+			</div>
+		);
+	}
 }
