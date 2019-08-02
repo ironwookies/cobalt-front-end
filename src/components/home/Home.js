@@ -10,8 +10,8 @@ export default function Home() {
         <div className='home-container'>
              <Navbar></Navbar>
              <Body></Body>
-             <About></About>
              <Action></Action>
+             <About></About>
              <Footer></Footer>
         </div>
     )

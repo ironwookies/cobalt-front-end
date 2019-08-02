@@ -1,0 +1,7 @@
+.chatgroups__container {
+	display: flex;
+	flex-direction: colunns;
+}
+
+.chatgroups__sidebar {
+}

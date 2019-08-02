@@ -8,7 +8,7 @@ export default function Body() {
                 <img src="/imgs/graphic-1.png" alt=""/>
            </div>
            <div className='body-tag-line'>
-               <h1>Connect, chat, collaborate, share files, empower your team with Cobalt</h1>
+               <h1>Connect, chat, collaborate, share files, empower your team with <span>Cobalt</span></h1>
                <hr/>
            </div>
         </div>
