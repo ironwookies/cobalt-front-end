@@ -18,6 +18,7 @@ export default class ChatRooms extends Component {
 
 	componentDidMount() {
 		this.fetchUserInfo();
+		this.fetchUserChats();
 	}
 
 	componentDidUpdate() {}
@@ -39,12 +40,12 @@ export default class ChatRooms extends Component {
 	};
 
 	renderListOfChats = () => {
-		if (this.state.chatRooms.length > 0) {
-			return this.state.contacts.map((chat, i) => {
+		if (this.state.chatGroups.length > 0) {
+			return this.state.chatGroups.map((group, i) => {
 				return (
 					<div key={i}>
-						<NavLink activeClassName="active" exact to={'/chat/' + chat._id}>
-							{chat.firstName}
+						<NavLink activeClassName="active" exact to={'/chat/' + group._id}>
+							{group.name}-{group.description}
 						</NavLink>
 					</div>
 				);
@@ -57,14 +58,15 @@ export default class ChatRooms extends Component {
 	fetchUserInfo = () => {
 		try {
 			axios
-				.get('http://localhost:3000/user', {
+				.get('http://192.168.125.9:3000/user', {
+					// .get('http://192.168.1.242:3000/user', {
 					headers: {
 						Authorization:
 							'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0cyI6W10sImNoYXQiOltdLCJmaWxlcyI6W10sInZlcmlmaWVkRW1haWwiOmZhbHNlLCJfaWQiOiI1ZDQzMGY5YjBkZjA2ZjJmNzE5MTVlM2EiLCJwYXNzd29yZCI6IiQyYiQxMCQvdnhTeXFRWlB1YktiT1VLR1hkSEZ1bUhkZ1hOT1I5NFU0aTM2SkhsSThVVlFiWjBocnQ5NiIsImVtYWlsIjoidGVzc2FzZGFzZGZhc2RmYXRAYXNkcy5jb20iLCJmaXJzdE5hbWUiOiJ0ZXN0IiwiY3JlYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwidXBkYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwiX192IjowLCJpYXQiOjE1NjQ2ODQ2Mjh9.WvI4c4qEivY5VCEPCj0ln0q4-0pDxbhuYU7ECmZGR2E',
 					},
 				})
 				.then((response) => {
-					this.setState({ contacts: response.data, chatGroups: response.data });
+					this.setState({ contacts: response.data });
 				})
 				.catch((error) => {
 					console.log(error);
@@ -73,6 +75,28 @@ export default class ChatRooms extends Component {
 			console.log(error);
 		}
 	};
+
+	fetchUserChats = () => {
+		try {
+			axios
+				.get('http://192.168.125.9:3000/chat/groups', {
+					// .get('http://192.168.1.242:3000/chat/groups', {
+					headers: {
+						Authorization:
+							'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0cyI6W10sImNoYXQiOltdLCJmaWxlcyI6W10sInZlcmlmaWVkRW1haWwiOmZhbHNlLCJfaWQiOiI1ZDQzMGY5YjBkZjA2ZjJmNzE5MTVlM2EiLCJwYXNzd29yZCI6IiQyYiQxMCQvdnhTeXFRWlB1YktiT1VLR1hkSEZ1bUhkZ1hOT1I5NFU0aTM2SkhsSThVVlFiWjBocnQ5NiIsImVtYWlsIjoidGVzc2FzZGFzZGZhc2RmYXRAYXNkcy5jb20iLCJmaXJzdE5hbWUiOiJ0ZXN0IiwiY3JlYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwidXBkYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwiX192IjowLCJpYXQiOjE1NjQ2ODQ2Mjh9.WvI4c4qEivY5VCEPCj0ln0q4-0pDxbhuYU7ECmZGR2E',
+					},
+				})
+				.then((response) => {
+					this.setState({ chatGroups: response.data });
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	render() {
 		return (
 			<div className="chatgroups__container">
@@ -83,7 +107,7 @@ export default class ChatRooms extends Component {
 					</div>
 					<div>
 						<h3>Chats</h3>
-						{this.renderListOfContacts()}
+						{this.renderListOfChats()}
 					</div>
 				</div>
 				<div>
