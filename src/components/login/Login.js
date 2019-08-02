@@ -1,9 +1,18 @@
-import React from 'react'
+import React from 'react';
+import Navbar from '../navbar/Navbar';
 
-export default function Login() {
+export default function Login(props) {
     return (
-        <div>
-            
+        <div className="login-container">
+            <div className="login-wrapper">
+                <form onSubmit={props.logIn}>
+                    <label>Email:</label>
+                    <input type="email" name="email" onChange={props.email} />
+                    <label>Password</label>
+                    <input type="password" name="password" onChange={props.password} />
+                    <button>Log In</button>
+                </form>
+            </div>
         </div>
     )
 }
