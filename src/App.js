@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-// import axios from 'axios';
-// import ProtectedRoute from './components/auth/protectedRoute';
-
 import Home from './components/home/Home';
 import ChatRooms from './components/chatGroups';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import Navbar from './components/navbar/Navbar';
-// import Dashboard from './components/dashboard/Dashboard';
+import Dashboard from './components/dashboard/Dashboard';
+import Giphy from './components/giphy/Giphy';
+import axios from 'axios';
+import giphyAPIkey from './components/giphy/giphyApyKey';
 
 import './App.css';
 import AuthService from './components/auth/auth-service';
@@ -18,10 +18,18 @@ class App extends Component {
 		super(props);
 		this.state = {
 			user: null,
+			ready: false,
+			key: giphyAPIkey().key,
+			giffs: []
 		};
 		this.service = new AuthService();
 	}
 
+	componentDidMount(){
+		this.getTrendingGiphy();
+		this.fetchUser();
+	}
+	
 	fetchUser = async () => {
 		if (this.state.user === null) {
 			return this.service
@@ -43,6 +51,42 @@ class App extends Component {
 
 	componentDidMount() {
 		this.fetchUser();
+
+	getSearchedGiphy(e){
+		let search = e.target.value;
+
+		if(search === ''){
+			this.getTrendingGiphy();
+			return;
+		}
+
+		axios.get("http://api.giphy.com/v1/gifs/search?q="+search+"&api_key="+this.state.key+"&limit=10")
+			.then((res)=>{
+				return this.setState({giffs: this.createGiffs(res.data.data)});
+			})
+			.catch((error)=>{
+				console.log(error);
+			});
+	}
+
+	getTrendingGiphy(){
+		axios.get("http://api.giphy.com/v1/gifs/trending?&api_key="+this.state.key+"&limit=10")
+			.then((res)=>{
+				return this.setState({giffs: this.createGiffs(res.data.data)});
+			})
+			.catch((error)=>{
+				console.log(error);
+			});
+	}
+
+	createGiffs(giffs){
+		return giffs.map((giff, i)=>{
+			return (
+				<div className='giff-container' key={i}>
+					<img src={giff.images.fixed_width.url} alt=""/>
+				</div>
+			)
+		});
 	}
 
 	render() {
@@ -74,6 +118,12 @@ class App extends Component {
 						exact
 						path="/login"
 						render={(props) => <Login {...props} getUser={this.getUser} />}
+					/>
+					<Route exact path="/giphy" render={() => 
+						<Giphy 
+							giffs={this.state.giffs}
+							search={(e)=>{this.getSearchedGiphy(e)}}
+						/>} 
 					/>
 					<Route
 						exact
