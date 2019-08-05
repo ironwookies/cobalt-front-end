@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
-import axios from 'axios';
 
+import AuthService from './../auth/auth-service';
 import './chat.css';
 export default class Chat extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: {
-				_id: '5d42efbef87c0c03307e0617',
-			},
+			user: this.props.user,
 			message: '',
 			messages: [],
 			socket: socketIOClient('http://192.168.125.9:3000', {
@@ -18,6 +16,7 @@ export default class Chat extends Component {
 			}),
 			room: this.props.match.params.id,
 		};
+		this.service = new AuthService();
 
 		this.state.socket.on('chat message', (data) => {
 			this.addMessage(data);
@@ -46,26 +45,12 @@ export default class Chat extends Component {
 
 	saveMessage = (message) => {
 		try {
-			axios
-				.post(
-					`http://192.168.125.9:3000/chat/messages/${
-						this.props.match.params.id
-					}`,
-					{
-						message,
-					},
-					{
-						headers: {
-							Authorization:
-								'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0cyI6W10sImNoYXQiOltdLCJmaWxlcyI6W10sInZlcmlmaWVkRW1haWwiOmZhbHNlLCJfaWQiOiI1ZDQzMGY5YjBkZjA2ZjJmNzE5MTVlM2EiLCJwYXNzd29yZCI6IiQyYiQxMCQvdnhTeXFRWlB1YktiT1VLR1hkSEZ1bUhkZ1hOT1I5NFU0aTM2SkhsSThVVlFiWjBocnQ5NiIsImVtYWlsIjoidGVzc2FzZGFzZGZhc2RmYXRAYXNkcy5jb20iLCJmaXJzdE5hbWUiOiJ0ZXN0IiwiY3JlYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwidXBkYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwiX192IjowLCJpYXQiOjE1NjQ2ODQ2Mjh9.WvI4c4qEivY5VCEPCj0ln0q4-0pDxbhuYU7ECmZGR2E',
-						},
-					},
-				)
+			this.service
+				.postRoute(`chat/messages/${this.props.match.params.id}`, {
+					message,
+				})
 				.then((response) => {
 					this.fetchChatHistory();
-				})
-				.catch((error) => {
-					console.log(error);
 				});
 		} catch (error) {
 			console.log(error);
@@ -96,23 +81,10 @@ export default class Chat extends Component {
 
 	fetchChatHistory = () => {
 		try {
-			axios
-				.get(
-					`http://192.168.125.9:3000/chat/history/${
-						this.props.match.params.id
-					}`,
-					{
-						headers: {
-							Authorization:
-								'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0cyI6W10sImNoYXQiOltdLCJmaWxlcyI6W10sInZlcmlmaWVkRW1haWwiOmZhbHNlLCJfaWQiOiI1ZDQzMGY5YjBkZjA2ZjJmNzE5MTVlM2EiLCJwYXNzd29yZCI6IiQyYiQxMCQvdnhTeXFRWlB1YktiT1VLR1hkSEZ1bUhkZ1hOT1I5NFU0aTM2SkhsSThVVlFiWjBocnQ5NiIsImVtYWlsIjoidGVzc2FzZGFzZGZhc2RmYXRAYXNkcy5jb20iLCJmaXJzdE5hbWUiOiJ0ZXN0IiwiY3JlYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwidXBkYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwiX192IjowLCJpYXQiOjE1NjQ2ODQ2Mjh9.WvI4c4qEivY5VCEPCj0ln0q4-0pDxbhuYU7ECmZGR2E',
-						},
-					},
-				)
+			this.service
+				.checkRoute(`chat/history/${this.props.match.params.id}`)
 				.then((response) => {
-					this.setState({ messages: response.data.messages });
-				})
-				.catch((error) => {
-					console.log(error);
+					this.setState({ messages: response.messages });
 				});
 		} catch (error) {}
 	};

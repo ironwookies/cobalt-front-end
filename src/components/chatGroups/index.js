@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
-import { NavLink, Route } from 'react-router-dom';
-import axios from 'axios';
+import { Switch, NavLink, Route } from 'react-router-dom';
 
+import AuthService from './../auth/auth-service';
 import Chat from '../chat/Chat';
+import SidebarNavbar from './../SidebarNavbar';
+import ContacList from './../ContactList';
+import RoomsList from './../RoomsList';
 import './charGroups.css';
 
 export default class ChatRooms extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			user: this.props.user,
 			chatGroups: [],
 			contacts: [],
 			error: [],
 			currentGroup: '',
 		};
+		this.service = new AuthService();
 	}
 
 	componentDidMount() {
 		this.fetchUserInfo();
 		this.fetchUserChats();
 	}
-
-	componentDidUpdate() {}
 
 	renderListOfContacts = () => {
 		if (this.state.contacts.length > 0) {
@@ -44,7 +47,10 @@ export default class ChatRooms extends Component {
 			return this.state.chatGroups.map((group, i) => {
 				return (
 					<div key={i}>
-						<NavLink activeClassName="active" exact to={'/chat/' + group._id}>
+						<NavLink
+							activeClassName="active"
+							exact
+							to={'/chat/room/' + group._id}>
 							{group.name}-{group.description}
 						</NavLink>
 					</div>
@@ -57,16 +63,10 @@ export default class ChatRooms extends Component {
 
 	fetchUserInfo = () => {
 		try {
-			axios
-				.get('http://192.168.125.9:3000/user', {
-					// .get('http://192.168.1.242:3000/user', {
-					headers: {
-						Authorization:
-							'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0cyI6W10sImNoYXQiOltdLCJmaWxlcyI6W10sInZlcmlmaWVkRW1haWwiOmZhbHNlLCJfaWQiOiI1ZDQzMGY5YjBkZjA2ZjJmNzE5MTVlM2EiLCJwYXNzd29yZCI6IiQyYiQxMCQvdnhTeXFRWlB1YktiT1VLR1hkSEZ1bUhkZ1hOT1I5NFU0aTM2SkhsSThVVlFiWjBocnQ5NiIsImVtYWlsIjoidGVzc2FzZGFzZGZhc2RmYXRAYXNkcy5jb20iLCJmaXJzdE5hbWUiOiJ0ZXN0IiwiY3JlYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwidXBkYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwiX192IjowLCJpYXQiOjE1NjQ2ODQ2Mjh9.WvI4c4qEivY5VCEPCj0ln0q4-0pDxbhuYU7ECmZGR2E',
-					},
-				})
+			this.service
+				.checkRoute('user')
 				.then((response) => {
-					this.setState({ contacts: response.data });
+					this.setState({ contacts: response });
 				})
 				.catch((error) => {
 					console.log(error);
@@ -78,16 +78,10 @@ export default class ChatRooms extends Component {
 
 	fetchUserChats = () => {
 		try {
-			axios
-				.get('http://192.168.125.9:3000/chat/groups', {
-					// .get('http://192.168.1.242:3000/chat/groups', {
-					headers: {
-						Authorization:
-							'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0cyI6W10sImNoYXQiOltdLCJmaWxlcyI6W10sInZlcmlmaWVkRW1haWwiOmZhbHNlLCJfaWQiOiI1ZDQzMGY5YjBkZjA2ZjJmNzE5MTVlM2EiLCJwYXNzd29yZCI6IiQyYiQxMCQvdnhTeXFRWlB1YktiT1VLR1hkSEZ1bUhkZ1hOT1I5NFU0aTM2SkhsSThVVlFiWjBocnQ5NiIsImVtYWlsIjoidGVzc2FzZGFzZGZhc2RmYXRAYXNkcy5jb20iLCJmaXJzdE5hbWUiOiJ0ZXN0IiwiY3JlYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwidXBkYXRlZEF0IjoiMjAxOS0wOC0wMVQxNjoxMzoxNS41ODZaIiwiX192IjowLCJpYXQiOjE1NjQ2ODQ2Mjh9.WvI4c4qEivY5VCEPCj0ln0q4-0pDxbhuYU7ECmZGR2E',
-					},
-				})
+			this.service
+				.checkRoute('chat/groups')
 				.then((response) => {
-					this.setState({ chatGroups: response.data });
+					this.setState({ chatGroups: response });
 				})
 				.catch((error) => {
 					console.log(error);
@@ -101,6 +95,21 @@ export default class ChatRooms extends Component {
 		return (
 			<div className="chatgroups__container">
 				<div className="chatgroups__sidebar">
+					<SidebarNavbar user={this.state.user} />
+					<Switch>
+						<Route
+							exact
+							path="/chat/contacts"
+							component={ContacList}
+							contactList={this.state.user.contacts}
+						/>
+						<Route
+							exact
+							path="/chat/rooms"
+							component={RoomsList}
+							// chatList={this.state.user.chat}
+						/>
+					</Switch>
 					<div>
 						<h3>Contacts</h3>
 						{this.renderListOfContacts()}
@@ -113,8 +122,8 @@ export default class ChatRooms extends Component {
 				<div>
 					<Route
 						exact
-						path="/chat/:id"
-						render={(props) => <Chat {...props} />}
+						path="/chat/room/:id"
+						render={(props) => <Chat {...props} user={this.props.user} />}
 					/>
 				</div>
 			</div>
