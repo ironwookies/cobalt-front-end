@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from './components/home/Home';
 import ChatRooms from './components/chatGroups';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import Dashboard from './components/dashboard/Dashboard';
+import Giphy from './components/giphy/Giphy';
 import axios from 'axios';
+import giphyAPIkey from './components/giphy/giphyApyKey';
 
 import './App.css';
 
@@ -21,49 +23,50 @@ export default class App extends Component {
 				confirmPassword: ''
 			},
 			ready: false,
+			key: giphyAPIkey().key,
+			giffs: []
 		};
 	}
 
-	getUserData(e){
-		let attribute = e.target.name;
-		let value = e.target.value;
-		let userData = {...this.state.userData};
-
-		userData[attribute] = value;
-
-		this.setState({userData: userData});
+	componentDidMount(){
+		this.getTrendingGiphy();
 	}
 
-	signUp(e){
-		e.preventDefault();
-		console.log(this.state.userData);
+	getSearchedGiphy(e){
+		let search = e.target.value;
 
-		axios.post('http://192.168.125.9:3000/signup', this.state.userData)
-		  .then(function (response) {
-			console.log(response);
-
-		  })
-		  .catch(function (error) {
-			console.log(error);
-		  });
-
-	}
-
-	logIn(e){
-		e.preventDefault();
-
-		let userData = {
-			email: this.state.userData.email,
-			password: this.state.userData.password
+		if(search === ''){
+			this.getTrendingGiphy();
+			return;
 		}
 
-		axios.post('http://192.168.125.9:3000/login', userData)
-			.then((response)=>{
-				console.log(response);
+		axios.get("http://api.giphy.com/v1/gifs/search?q="+search+"&api_key="+this.state.key+"&limit=10")
+			.then((res)=>{
+				return this.setState({giffs: this.createGiffs(res.data.data)});
 			})
 			.catch((error)=>{
 				console.log(error);
 			});
+	}
+
+	getTrendingGiphy(){
+		axios.get("http://api.giphy.com/v1/gifs/trending?&api_key="+this.state.key+"&limit=10")
+			.then((res)=>{
+				return this.setState({giffs: this.createGiffs(res.data.data)});
+			})
+			.catch((error)=>{
+				console.log(error);
+			});
+	}
+
+	createGiffs(giffs){
+		return giffs.map((giff, i)=>{
+			return (
+				<div className='giff-container' key={i}>
+					<img src={giff.images.fixed_width.url} alt=""/>
+				</div>
+			)
+		});
 	}
 
 	render() {
@@ -72,7 +75,7 @@ export default class App extends Component {
 				<Switch>
 					<Route exact path="/" render={() => <Home />} />
 					<Route path="/chat" render={() => <ChatRooms />} />
-					<Route exact path="/login" render={(props) => 
+					<Route exact path="/login" render={(props) =>
 						<Login 
 							{...props}
 							email={(e)=>{this.getUserData(e)}}
@@ -89,7 +92,11 @@ export default class App extends Component {
 							signUp={(e)=>{this.signUp(e)}}
 						/>} 
 					/>
-					<Route exact path="/dashboard" 
+					<Route exact path="/giphy" render={() => 
+						<Giphy 
+							giffs={this.state.giffs}
+							search={(e)=>{this.getSearchedGiphy(e)}}
+						/>} 
 					/>
 				</Switch>
 			</div>
