@@ -1,8 +1,22 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const ContactList = (props) => {
-	console.log('this is the contacts list', props);
-	return <div>this sis the contacts list</div>;
+	const renderContacts = () => {
+		return props.contacts.map((user, i) => {
+			return (
+				<NavLink key={i} to={`/chat/room${user._id}`}>
+					{user.firstName} {user.familyName}
+				</NavLink>
+			);
+		});
+	};
+	return (
+		<div>
+			<h3>Contacts</h3>
+			{renderContacts()}
+		</div>
+	);
 };
 
 export default ContactList;

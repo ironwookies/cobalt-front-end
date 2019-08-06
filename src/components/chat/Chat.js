@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
+import axios from 'axios';
 
+import Giphy from './../giphy/Giphy';
 import AuthService from './../auth/auth-service';
 import './chat.css';
 export default class Chat extends Component {
@@ -11,9 +13,10 @@ export default class Chat extends Component {
 			message: '',
 			messages: [],
 			socket: socketIOClient('http://192.168.125.9:3000', {
-				// socket: socketIOClient('http://192.168.1.242:3000', {
 				query: { _id: this.props.match.params.id },
 			}),
+			giphy: false,
+			gifs: [],
 			room: this.props.match.params.id,
 		};
 		this.service = new AuthService();
@@ -24,7 +27,25 @@ export default class Chat extends Component {
 	}
 
 	componentDidMount() {
+		console.log('component did mount');
 		this.fetchChatHistory();
+		this.getTrendingGiphy();
+	}
+
+	getTrendingGiphy() {
+		axios
+			.get(
+				'http://api.giphy.com/v1/gifs/trending?&api_key=' +
+					'm5ItKE4FT6iJhDAdWAYtNAhVOkG40WUT' +
+					// process.env.GIPHYKEY +
+					'&limit=12',
+			)
+			.then((res) => {
+				return this.setState({ gifs: this.createGiffs(res.data.data) });
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}
 
 	addMessage = (data) => {
@@ -96,6 +117,75 @@ export default class Chat extends Component {
 		this.setState({ [e.target.name]: e.target.value });
 	};
 
+	displayInput = () => {
+		this.getTrendingGiphy();
+		if (this.state.giphy) {
+			return (
+				<Giphy
+					gifs={this.state.gifs}
+					search={(e) => {
+						this.getSearchedGiphy(e);
+					}}
+				/>
+			);
+		} else {
+			return (
+				<textarea
+					maxLength="700"
+					placeholder="Message"
+					className="chatarea__textarea"
+					onKeyPress={(e) => {
+						this.inputOnChange(e);
+					}}
+					onChange={(e) => {
+						this.inputOnChange(e);
+					}}
+					value={this.state.message}
+					name="message"
+				/>
+			);
+		}
+	};
+
+	toggleGif = (e) => {
+		e.preventDefault();
+		this.setState({ giphy: !this.state.giphy });
+	};
+
+	getSearchedGiphy(e) {
+		let search = e.target.value;
+		if (search === '') {
+			this.getTrendingGiphy();
+			return;
+		}
+
+		axios
+			.get(
+				'http://api.giphy.com/v1/gifs/search?q=' +
+					search +
+					'&api_key=' +
+					'm5ItKE4FT6iJhDAdWAYtNAhVOkG40WUT' +
+					// this.state.key +
+					'&limit=12',
+			)
+			.then((res) => {
+				return this.setState({ gifs: this.createGiffs(res.data.data) });
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	createGiffs(giffs) {
+		return giffs.map((giff, i) => {
+			return (
+				<div className="giff-container" key={i}>
+					<img src={giff.images.fixed_width.url} alt="" />
+				</div>
+			);
+		});
+	}
+
 	render() {
 		return (
 			<div className="card">
@@ -107,26 +197,26 @@ export default class Chat extends Component {
 					<div className="messages">{this.renderMessages()}</div>
 				</div>
 				<div className="card-footer">
-					<form>
-						<textarea
-							maxLength="700"
-							placeholder="Message"
-							className="form-control"
-							onKeyPress={(e) => {
-								this.inputOnChange(e);
-							}}
-							onChange={(e) => {
-								this.inputOnChange(e);
-							}}
-							value={this.state.message}
-							name="message"
-						/>
-						<br />
-						<button
-							onClick={this.sendMessage}
-							className="btn btn-primary form-control">
-							Send
-						</button>
+					<form
+						className="chatarea"
+						onSubmit={(e) => {
+							e.preventDefault();
+						}}>
+						{this.displayInput()}
+						<div className="chatarea__input">
+							<button
+								onClick={this.sendMessage}
+								className="btn btn-primary form-control">
+								Send
+							</button>
+							<button
+								onClick={(e) => {
+									this.toggleGif(e);
+								}}
+								className="btn btn-primary form-control">
+								Giphy
+							</button>
+						</div>
 					</form>
 				</div>
 			</div>

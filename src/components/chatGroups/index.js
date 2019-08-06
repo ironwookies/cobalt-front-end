@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, NavLink, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import AuthService from './../auth/auth-service';
 import Chat from '../chat/Chat';
 import SidebarNavbar from './../SidebarNavbar';
-import ContacList from './../ContactList';
+import ContactList from './../ContactList';
 import RoomsList from './../RoomsList';
 import './charGroups.css';
 
@@ -15,80 +15,21 @@ export default class ChatRooms extends Component {
 			user: this.props.user,
 			chatGroups: [],
 			contacts: [],
+			fullContacts: [],
 			error: [],
 			currentGroup: '',
 		};
 		this.service = new AuthService();
 	}
 
-	componentDidMount() {
-		this.fetchUserInfo();
-		this.fetchUserChats();
-	}
-
-	renderListOfContacts = () => {
-		if (this.state.contacts.length > 0) {
-			return this.state.contacts.map((chat, i) => {
-				return (
-					<div key={i}>
-						<NavLink activeClassName="active" exact to={'/chat/' + chat._id}>
-							{chat.firstName}
-						</NavLink>
-					</div>
-				);
-			});
-		} else {
-			return <div>Loading users...</div>;
-		}
+	componentDidMount = () => {
+		this.getfullContactList();
 	};
 
-	renderListOfChats = () => {
-		if (this.state.chatGroups.length > 0) {
-			return this.state.chatGroups.map((group, i) => {
-				return (
-					<div key={i}>
-						<NavLink
-							activeClassName="active"
-							exact
-							to={'/chat/room/' + group._id}>
-							{group.name}-{group.description}
-						</NavLink>
-					</div>
-				);
-			});
-		} else {
-			return <div>Loading Chat Groups...</div>;
-		}
-	};
-
-	fetchUserInfo = () => {
-		try {
-			this.service
-				.checkRoute('user')
-				.then((response) => {
-					this.setState({ contacts: response });
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	fetchUserChats = () => {
-		try {
-			this.service
-				.checkRoute('chat/groups')
-				.then((response) => {
-					this.setState({ chatGroups: response });
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		} catch (error) {
-			console.log(error);
-		}
+	getfullContactList = () => {
+		this.service.checkRoute('user').then((response) => {
+			this.setState({ fullContacts: response });
+		});
 	};
 
 	render() {
@@ -100,26 +41,37 @@ export default class ChatRooms extends Component {
 						<Route
 							exact
 							path="/chat/contacts"
-							component={ContacList}
-							contactList={this.state.user.contacts}
+							render={(props) => {
+								return (
+									<ContactList {...props} contacts={this.state.user.contacts} />
+								);
+							}}
 						/>
 						<Route
 							exact
 							path="/chat/rooms"
-							component={RoomsList}
-							// chatList={this.state.user.chat}
+							render={(props) => {
+								return (
+									<RoomsList {...props} roomsList={this.state.user.chat} />
+								);
+							}}
+						/>
+						<Route
+							exact
+							path="/chat/contactslist"
+							render={(props) => {
+								return (
+									<ContactList
+										{...props}
+										contacts={this.state.fullContacts}
+										roomsList={this.state.user.chat}
+									/>
+								);
+							}}
 						/>
 					</Switch>
-					<div>
-						<h3>Contacts</h3>
-						{this.renderListOfContacts()}
-					</div>
-					<div>
-						<h3>Chats</h3>
-						{this.renderListOfChats()}
-					</div>
 				</div>
-				<div>
+				<div className="chatgroups__messagearea">
 					<Route
 						exact
 						path="/chat/room/:id"
