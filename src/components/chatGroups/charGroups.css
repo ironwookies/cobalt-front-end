@@ -1,7 +1,11 @@
 .chatgroups__container {
 	display: flex;
-	flex-direction: colunns;
 }
 
 .chatgroups__sidebar {
+	width: 20vw;
+}
+
+.chatgroups__messagearea {
+	width: 80vw;
 }

@@ -1,4 +1,21 @@
 .messages {
 	overflow: scroll;
-	height: 80vh;
+	height: 70vh;
+}
+
+.chatarea {
+	width: 95%;
+	display: flex;
+	padding: 1%;
+	justify-content: space-around;
+	margin-right: 0;
+}
+
+.chatarea__textarea {
+	width: 80%;
+}
+.chatarea__input {
+	width: 20%;
+	display: flex;
+	justify-content: space-evenly;
 }

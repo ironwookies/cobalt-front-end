@@ -104,17 +104,16 @@ class App extends Component {
 					<Route exact path="/" render={() => <Home />} />
 					<Route
 						path="/chat"
-						render={() => {
+						render={(props) => {
 							this.fetchUser().then(() => {});
 							if (this.state.user) {
-								return <ChatRooms user={this.state.user} />;
+								return <ChatRooms {...props} user={this.state.user} />;
 							} else {
 								return (
 									<Redirect
 										push
 										to={{
 											pathname: '/login',
-											// state: { from: this.props.location },
 										}}
 									/>
 								);

@@ -31,6 +31,27 @@ export default class ChatRooms extends Component {
 			this.setState({ fullContacts: response });
 		});
 	};
+	addToContacts = (id) => {
+		this.service.postRoute(`user/${id}`);
+		this.setState({ contacts: [...this.state.contacts, id] });
+	};
+
+	checkRoom = async (id) => {
+		let rooms = this.state.user.chat.filter((room) => {
+			return room.users.includes(id);
+		});
+		if (rooms.length === 1) {
+			this.props.history.push(`/chat/room/${rooms[0]._id}`);
+		} else {
+			let response = await this.service.postRoute('chat', {
+				users: [id, this.state.user._id],
+				name: 'Private Chat',
+				description: '?',
+				type: 'private',
+			});
+			this.props.history.push(`/chat/room/${response.chat._id}`);
+		}
+	};
 
 	render() {
 		return (
@@ -43,7 +64,11 @@ export default class ChatRooms extends Component {
 							path="/chat/contacts"
 							render={(props) => {
 								return (
-									<ContactList {...props} contacts={this.state.user.contacts} />
+									<ContactList
+										{...props}
+										contacts={this.state.user.contacts}
+										addChat={this.checkRoom}
+									/>
 								);
 							}}
 						/>
@@ -64,7 +89,7 @@ export default class ChatRooms extends Component {
 									<ContactList
 										{...props}
 										contacts={this.state.fullContacts}
-										roomsList={this.state.user.chat}
+										addChat={this.addToContacts}
 									/>
 								);
 							}}
