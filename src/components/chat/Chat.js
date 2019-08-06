@@ -27,7 +27,6 @@ export default class Chat extends Component {
 	}
 
 	componentDidMount() {
-		console.log('component did mount');
 		this.fetchChatHistory();
 		this.getTrendingGiphy();
 	}
@@ -38,7 +37,7 @@ export default class Chat extends Component {
 				'http://api.giphy.com/v1/gifs/trending?&api_key=' +
 					'm5ItKE4FT6iJhDAdWAYtNAhVOkG40WUT' +
 					// process.env.GIPHYKEY +
-					'&limit=12',
+					'&limit=1',
 			)
 			.then((res) => {
 				return this.setState({ gifs: this.createGiffs(res.data.data) });
@@ -80,11 +79,22 @@ export default class Chat extends Component {
 
 	renderMessages = () => {
 		if (this.state.messages && this.state.messages.length === 0) {
-			return <div />;
+			return null;
 		} else {
 			return (
 				<div>
 					{this.state.messages.map((message, i) => {
+						if (message.type === 'Image') {
+							return (
+								<div key={i}>
+									<h3>Author: {message.creator.firstName}</h3>
+									<p>
+										<span>Message:</span>
+										<img src={message.content} alt="gif" />
+									</p>
+								</div>
+							);
+						}
 						return (
 							<div key={i}>
 								<h3>Author: {message.creator.firstName}</h3>
@@ -166,7 +176,7 @@ export default class Chat extends Component {
 					'&api_key=' +
 					'm5ItKE4FT6iJhDAdWAYtNAhVOkG40WUT' +
 					// this.state.key +
-					'&limit=12',
+					'&limit=1',
 			)
 			.then((res) => {
 				return this.setState({ gifs: this.createGiffs(res.data.data) });
@@ -176,15 +186,25 @@ export default class Chat extends Component {
 			});
 	}
 
-	createGiffs(giffs) {
+	getImageUrl = (e) => {
+		console.log(e.target.src);
+		this.setState({
+			message: `<img src='${e.target.src}'/>`,
+		});
+	};
+	createGiffs = (giffs) => {
 		return giffs.map((giff, i) => {
 			return (
 				<div className="giff-container" key={i}>
-					<img src={giff.images.fixed_width.url} alt="" />
+					<img
+						src={giff.images.fixed_width.url}
+						alt=""
+						onClick={this.getImageUrl}
+					/>
 				</div>
 			);
 		});
-	}
+	};
 
 	render() {
 		return (
