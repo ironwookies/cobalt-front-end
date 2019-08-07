@@ -3,13 +3,17 @@ import { NavLink } from 'react-router-dom';
 
 const RoomsList = (props) => {
 	const renderRoomList = () => {
-		return props.roomsList.map((room, i) => {
-			return (
-				<NavLink key={i} to={`/chat/room/${room._id}`}>
-					{room.name} - {room.description} - {room.updatedAt} - {room.private}
-				</NavLink>
-			);
-		});
+		if (props.roomsList) {
+			return props.roomsList.map((room, i) => {
+				return (
+					<NavLink key={i} to={`/chat/room/${room._id}`}>
+						{room.name} - {room.updatedAt}
+					</NavLink>
+				);
+			});
+		} else {
+			return <div>No rooms Available</div>;
+		}
 	};
 
 	return (

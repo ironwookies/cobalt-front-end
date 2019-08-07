@@ -17,26 +17,27 @@ class Signup extends Component {
 
 	handleFormSubmit = (e) => {
 		e.preventDefault();
-		const email = this.state.username;
-		const password = this.state.password;
-
-		this.service
-			.signup(email, password)
-			.then((response) => {
-				this.setState({
-					email: '',
-					password: '',
+		if (this.state.password === this.state.confirmPassword) {
+			this.service
+				.signup(this.state.username, this.state.password)
+				.then((response) => {
+					this.setState({
+						email: '',
+						password: '',
+					});
+					this.props.getUser(response);
+				})
+				.catch((error) => {
+					console.log(error);
 				});
-				this.props.getUser(response);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		} else {
+			console.log('passwords do not match');
+		}
 	};
 
 	handleChange = (e) => {
 		const { name, value } = e.target;
-		this.state({ [name]: value });
+		this.setState({ [name]: value });
 	};
 
 	render() {

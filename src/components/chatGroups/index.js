@@ -45,8 +45,8 @@ export default class ChatRooms extends Component {
 		} else {
 			let response = await this.service.postRoute('chat', {
 				users: [id, this.state.user._id],
-				name: 'Private Chat',
-				description: '?',
+				name: ' ',
+				description: ' ',
 				type: 'private',
 			});
 			this.props.history.push(`/chat/room/${response.chat._id}`);
