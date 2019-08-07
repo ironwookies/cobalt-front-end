@@ -15,9 +15,11 @@ const SidebarNavbar = () => {
 						Chats
 					</NavLink>
 				</li>
-				{/* <li>
-					<NavLink>Add Contact</NavLink>
-				</li> */}
+				<li>
+					<NavLink exact to={'/chat/contactslist'}>
+						Add Contact
+					</NavLink>
+				</li>
 			</ul>
 		</div>
 	);
