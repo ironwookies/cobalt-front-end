@@ -4,11 +4,8 @@ import Home from './components/home/Home';
 import ChatRooms from './components/chatGroups';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
-import Navbar from './components/navbar/Navbar';
-
-import {Picker} from 'emoji-mart';
-import 'emoji-mart/css/emoji-mart.css';
-
+import axios from 'axios';
+import giphyAPIkey from './components/giphy/giphyApyKey'
 
 import './App.css';
 import AuthService from './components/auth/auth-service';
@@ -97,30 +94,9 @@ class App extends Component {
 		});
 	}
 
-	// 	emojisChar.forEach((emoji, i)=>{
-	// 		if(i % 137 === 0){
-	// 			pages.push(<EmojiPage key={i} />)
-	// 		}
-	// 		if(i % 137 !== 0){
-	// 			collectedEmojis.push(emoji);
-	// 		}
-	// 		if(collectedEmojis.length === 137){
-	// 			collections.push([...collectedEmojis]);
-	// 			collectedEmojis = [];
-	// 		}
-	// 	});
-
-	// 	pages = pages.map((e, i)=>{
-	// 		return (<EmojiPage key={i} emojis={collections[i]}/>);
-	// 	});
-
-	// 	this.setState({emojis: pages});
-	// }
-
 	render() {
 		return (
 			<div>
-				
 				<Switch>
 					<Route exact path="/" render={() => <Home />} />
 					<Route
@@ -168,7 +144,6 @@ class App extends Component {
 						path="/dashboard"
 						render={(props) => <ChatRooms {...props} />}
 					/>
-					<Route exact path="/emojis" render={() => <Picker />} />
 				</Switch>
 			</div>
 		);
