@@ -1,5 +1,5 @@
 .body-container{
-    background: white;
+    background: #606474;
     width: 100%;
     min-height: 650px;
     display: flex;
@@ -8,36 +8,39 @@
 }
 
 .body-graphic{
-    width: 40%;
-    height: 450px;
+    width: 50%;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 .body-graphic img{
-    width: 450px;
+    width: 70%;
+    height: 70%;
 }
 
 .body-tag-line{
-    width: 40%;
-    height: 450px;
+    width: 50%;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
 .body-tag-line h1{
-    width: 100%;
-    font-size: 52px;
-    color:#0047ab;
+    width: 70%;
+    height: auto;
+    font-size: 64px;
+    color: white;
     font-family: 'Roboto';
     font-weight: bold;
     margin: -40px 0px 0px 0px;
+    text-align: left;
 }
 
 .body-tag-line h1 span{
     width: 100%;
     font-size: 52px;
-    color: #0047ab;
+    color: #0496ff;
     font-family: 'Roboto';
     font-weight: bold;
 }
