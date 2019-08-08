@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
 import axios from 'axios';
+import ReactTextareaAutocomplete from '@webscopeio/react-textarea-autocomplete';
+import { Picker, emojiIndex } from 'emoji-mart';
+import { Smile } from 'react-feather';
+
+import 'emoji-mart/css/emoji-mart.css';
 
 import Giphy from './../giphy/Giphy';
 import AuthService from './../auth/auth-service';
@@ -10,6 +15,7 @@ export default class Chat extends Component {
 		super(props);
 		this.state = {
 			user: this.props.user,
+			showEmojiPicker: false,
 			message: '',
 			messages: [],
 			socket: socketIOClient('http://192.168.125.9:3000', {
@@ -32,12 +38,12 @@ export default class Chat extends Component {
 	}
 
 	getTrendingGiphy() {
+		console.log('env variabless', process.env);
 		axios
 			.get(
-				'http://api.giphy.com/v1/gifs/trending?&api_key=' +
-					'm5ItKE4FT6iJhDAdWAYtNAhVOkG40WUT' +
-					// process.env.GIPHYKEY +
-					'&limit=1',
+				'https://api.giphy.com/v1/gifs/trending?&api_key=' +
+					process.env.REACT_APP_GIPHY_API +
+					'&limit=5',
 			)
 			.then((res) => {
 				return this.setState({ gifs: this.createGiffs(res.data.data) });
@@ -128,7 +134,6 @@ export default class Chat extends Component {
 	};
 
 	displayInput = () => {
-		this.getTrendingGiphy();
 		if (this.state.giphy) {
 			return (
 				<Giphy
@@ -140,19 +145,50 @@ export default class Chat extends Component {
 			);
 		} else {
 			return (
-				<textarea
-					maxLength="700"
-					placeholder="Message"
-					className="chatarea__textarea"
-					onKeyPress={(e) => {
-						this.inputOnChange(e);
-					}}
-					onChange={(e) => {
-						this.inputOnChange(e);
-					}}
-					value={this.state.message}
-					name="message"
-				/>
+				<div>
+					<button
+						type="button"
+						className="toggle-emoji"
+						onClick={this.toggleEmojiPicker}>
+						<Smile />
+					</button>
+					<ReactTextareaAutocomplete
+						className="message-input my-textarea"
+						name="message"
+						value={this.state.message}
+						loadingComponent={() => <span>Loading</span>}
+						onKeyPress={this.inputOnChange}
+						onChange={this.inputOnChange}
+						placeholder="Compose your message and hit ENTER to send"
+						trigger={{
+							':': {
+								dataProvider: (token) =>
+									emojiIndex.search(token).map((o) => ({
+										colons: o.colons,
+										native: o.native,
+									})),
+								component: ({ entity: { native, colons } }) => (
+									<div>{`${colons} ${native}`}</div>
+								),
+								output: (item) => `${item.native}`,
+							},
+						}}
+					/>
+					<div className="chatarea__input">
+						<button
+							onClick={this.sendMessage}
+							className="btn btn-primary form-control">
+							Send
+						</button>
+						<button
+							onClick={(e) => {
+								this.toggleGif(e);
+							}}
+							className="btn btn-primary form-control">
+							Giphy
+						</button>
+					</div>
+				</div>
 			);
 		}
 	};
@@ -171,12 +207,11 @@ export default class Chat extends Component {
 
 		axios
 			.get(
-				'http://api.giphy.com/v1/gifs/search?q=' +
+				'https://api.giphy.com/v1/gifs/search?q=' +
 					search +
 					'&api_key=' +
-					'm5ItKE4FT6iJhDAdWAYtNAhVOkG40WUT' +
-					// this.state.key +
-					'&limit=1',
+					process.env.REACT_APP_GIPHY_API +
+					'&limit=5',
 			)
 			.then((res) => {
 				return this.setState({ gifs: this.createGiffs(res.data.data) });
@@ -186,23 +221,57 @@ export default class Chat extends Component {
 			});
 	}
 
-	getImageUrl = (e) => {
-		console.log(e.target.src);
-		this.setState({
-			message: `<img src='${e.target.src}'/>`,
+	sendGifMessage = (e) => {
+		this.state.socket.emit('chat message', {
+			creator: this.state.user._id,
+			content: this.state.message,
+			type: 'Image',
+			createAt: new Date(),
 		});
+
+		try {
+			this.service
+				.postRoute(`chat/messages/${this.props.match.params.id}`, {
+					message: e.target.src,
+					type: 'Image',
+				})
+				.then((response) => {
+					this.fetchChatHistory();
+				});
+
+			this.setState({
+				giphy: false,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	};
+
 	createGiffs = (giffs) => {
 		return giffs.map((giff, i) => {
+			// console.log(giffs);
 			return (
 				<div className="giff-container" key={i}>
 					<img
 						src={giff.images.fixed_width.url}
 						alt=""
-						onClick={this.getImageUrl}
+						onClick={this.sendGifMessage}
 					/>
 				</div>
 			);
+		});
+	};
+
+	toggleEmojiPicker = () => {
+		this.setState({
+			showEmojiPicker: !this.state.showEmojiPicker,
+		});
+	};
+
+	addEmoji = (emoji) => {
+		this.setState({
+			message: `${this.state.message}${emoji.native}`,
+			showEmojiPicker: false,
 		});
 	};
 
@@ -215,6 +284,9 @@ export default class Chat extends Component {
 					</div>
 					<hr />
 					<div className="messages">{this.renderMessages()}</div>
+					{this.state.showEmojiPicker ? (
+						<Picker set="emojione" onSelect={this.addEmoji} />
+					) : null}
 				</div>
 				<div className="card-footer">
 					<form
@@ -223,20 +295,6 @@ export default class Chat extends Component {
 							e.preventDefault();
 						}}>
 						{this.displayInput()}
-						<div className="chatarea__input">
-							<button
-								onClick={this.sendMessage}
-								className="btn btn-primary form-control">
-								Send
-							</button>
-							<button
-								onClick={(e) => {
-									this.toggleGif(e);
-								}}
-								className="btn btn-primary form-control">
-								Giphy
-							</button>
-						</div>
 					</form>
 				</div>
 			</div>

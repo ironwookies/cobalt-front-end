@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import axios from 'axios';
+
 import Home from './components/home/Home';
 import ChatRooms from './components/chatGroups';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
-import axios from 'axios';
-import giphyAPIkey from './components/giphy/giphyApyKey'
+
+import giphyAPIkey from './components/giphy/giphyApyKey';
 
 import './App.css';
 import AuthService from './components/auth/auth-service';
@@ -55,7 +57,7 @@ class App extends Component {
 
 		axios
 			.get(
-				'http://api.giphy.com/v1/gifs/search?q=' +
+				'https://api.giphy.com/v1/gifs/search?q=' +
 					search +
 					'&api_key=' +
 					this.state.key +
@@ -72,7 +74,7 @@ class App extends Component {
 	getTrendingGiphy() {
 		axios
 			.get(
-				'http://api.giphy.com/v1/gifs/trending?&api_key=' +
+				'https://api.giphy.com/v1/gifs/trending?&api_key=' +
 					this.state.key +
 					'&limit=10',
 			)
@@ -98,7 +100,11 @@ class App extends Component {
 		return (
 			<div>
 				<Switch>
-					<Route exact path="/" render={() => <Home />} />
+					<Route
+						exact
+						path="/"
+						render={(props) => <Home {...props} user={this.state.user} />}
+					/>
 					<Route
 						path="/chat"
 						render={(props) => {
@@ -122,18 +128,6 @@ class App extends Component {
 						path="/login"
 						render={(props) => <Login {...props} getUser={this.getUser} />}
 					/>
-					{/* <Route
-						exact
-						path="/giphy"
-						render={() => (
-							<Giphy
-								giffs={this.state.giffs}
-								search={(e) => {
-									this.getSearchedGiphy(e);
-								}}
-							/>
-						)}
-					/> */}
 					<Route
 						exact
 						path="/signup"

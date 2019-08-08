@@ -12,16 +12,10 @@ export default class Navbar extends Component {
 		this.service = new AuthService();
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	this.setState({ ...this.state, user: nextProps['user'] });
-	// }
-
 	logoutUser = () => {
-		this.service.logout().then(() => {
-			this.setState({ user: null });
-			this.props.getUser(null);
-			localStorage.removeItem('jwt');
-		});
+		this.service.logout();
+		this.setState({ user: null });
+		// this.props.getUser(null);
 	};
 
 	render() {
@@ -41,9 +35,7 @@ export default class Navbar extends Component {
 									</NavLink>
 								</li>
 								<li>
-									<NavLink className="link" exact to={'/login'}>
-										Logout
-									</NavLink>
+									<button onClick={this.logoutUser}>Logout</button>
 								</li>
 							</ul>
 						</div>
