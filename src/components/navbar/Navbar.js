@@ -61,14 +61,22 @@ export default class Navbar extends Component {
 						<div className="links">
 							<ul>
 								<li>
-									<NavLink className="link" exact to={'/login'}>
-										Log In
-									</NavLink>
+									<div className='nav-button-gradient'>
+										<button>
+											<NavLink className="link" exact to={'/login'}>
+												Log In
+											</NavLink>
+										</button>
+									</div>
 								</li>
 								<li>
-									<NavLink className="link" exact to={'/signup'}>
-										Sign Up
-									</NavLink>
+								<div className='nav-button-gradient'>
+										<button>
+											<NavLink className="link" exact to={'/signup'}>
+												Sign Up
+											</NavLink>
+										</button>
+									</div>
 								</li>
 							</ul>
 						</div>

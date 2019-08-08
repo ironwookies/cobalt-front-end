@@ -1,16 +1,15 @@
 .action-section{
-    background: #ffbc42;
+    background: #6457a6;
     width: 100%;
     height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 50px 0px;
 }
 
 .action-wrapper{
     width: 80%;
-    height: 200px;
+    height: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -44,7 +43,7 @@
 
 .get-started{
     text-decoration: none;
-    background: #d81159;
+    background: #19d7f8;
     padding: 10px 30px;
     border-radius: 25px;
     color: white;

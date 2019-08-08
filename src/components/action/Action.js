@@ -10,7 +10,7 @@ export default function Action() {
                     <h1>Sign up today and start collaborating</h1>
                     {/* <hr/> */}
                 </div>
-                <NavLink className='get-started' exact to={'/singup'}>Get Started</NavLink>
+                <NavLink className='get-started' exact to={'/signup'}>Get Started</NavLink>
             </div>
         </div>
     )

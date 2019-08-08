@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AuthService from './../auth/auth-service';
 import { Link } from 'react-router-dom';
+import './signup.css';	
 
 class Signup extends Component {
 	constructor(props) {
@@ -42,63 +43,79 @@ class Signup extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="signup-container">
 				<form onSubmit={this.handleFormSubmit}>
-					<label>Name:</label>
-					<input
-						type="text"
-						name="firstName"
-						value={this.state.firstName}
-						onChange={(e) => {
-							this.handleChange(e);
-						}}
-						required
-					/>
-					<label>Last Name:</label>
-					<input
-						type="text"
-						name="familyName"
-						value={this.state.familyName}
-						onChange={(e) => {
-							this.handleChange(e);
-						}}
-						required
-					/>
-					<label>Email:</label>
-					<input
-						type="email"
-						name="email"
-						value={this.state.email}
-						onChange={(e) => {
-							this.handleChange(e);
-						}}
-						required
-					/>
-					<label>Password:</label>
-					<input
-						type="password"
-						name="password"
-						value={this.state.password}
-						onChange={(e) => {
-							this.handleChange(e);
-						}}
-						required
-					/>
-					<label>Confirm Password:</label>
-					<input
-						type="password"
-						name="confirmPassword"
-						value={this.state.confirmPassword}
-						onChange={(e) => {
-							this.handleChange(e);
-						}}
-						required
-					/>
-					<button>Sing up</button>
-					<p>
-						Already have account?
-						<Link to={'/'}> Login</Link>
-					</p>
+					<div className="form-wrapper">
+						<div>
+							<h2>Create Account</h2>
+						</div>
+						<label>Name:</label>
+						<input
+							type="text"
+							name="firstName"
+							value={this.state.firstName}
+							onChange={(e) => {
+								this.handleChange(e);
+							}}
+							required
+							placeholder='Enter your name'
+						/>
+						<label>Last Name:</label>
+						<input
+							type="text"
+							name="familyName"
+							value={this.state.familyName}
+							onChange={(e) => {
+								this.handleChange(e);
+							}}
+							required
+							placeholder='Enter your last name'
+						/>
+						<label>Email:</label>
+						<input
+							type="email"
+							name="email"
+							value={this.state.email}
+							onChange={(e) => {
+								this.handleChange(e);
+							}}
+							required
+							placeholder='Enter your email'
+						/>
+						<label>Password:</label>
+						<input
+							type="password"
+							name="password"
+							value={this.state.password}
+							onChange={(e) => {
+								this.handleChange(e);
+							}}
+							required
+							placeholder='Enter a new password'
+						/>
+						<label>Confirm Password:</label>
+						<input
+							type="password"
+							name="confirmPassword"
+							value={this.state.confirmPassword}
+							onChange={(e) => {
+								this.handleChange(e);
+							}}
+							required
+							placeholder='Confirm your new password'
+						/>
+						<div className='signup-button'>
+							<div className='button-gradient'>
+								<button>Create</button>
+							</div>
+						</div>
+						<div className="signup-login-link">
+							<p>
+								Already have account?
+								<Link className='signup-login-link-link' to={'/'}> Login</Link>
+							</p>
+						</div>
+					</div>
 				</form>
 			</div>
 		);
@@ -106,47 +123,3 @@ class Signup extends Component {
 }
 
 export default Signup;
-
-// import React from 'react';
-// import AuthService from './';
-// export default function Signup(props) {
-// 	return (
-// 		<div className="login-container">
-// 			<div className="loging-wrapper">
-// 				<form onSubmit={props.signUp}>
-// 					<label>Name:</label>
-// 					<input
-// 						type="text"
-// 						name="firstName"
-// 						onChange={props.firstName}
-// 						required
-// 					/>
-// 					<label>Last Name:</label>
-// 					<input
-// 						type="text"
-// 						name="familyName"
-// 						onChange={props.familyName}
-// 						required
-// 					/>
-// 					<label>Email:</label>
-// 					<input type="email" name="email" onChange={props.email} required />
-// 					<label>Password:</label>
-// 					<input
-// 						type="password"
-// 						name="password"
-// 						onChange={props.password}
-// 						required
-// 					/>
-// 					<label>Confirm Password:</label>
-// 					<input
-// 						type="password"
-// 						name="confirmPassword"
-// 						onChange={props.password}
-// 						required
-// 					/>
-// 					<button>Sing up</button>
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// }

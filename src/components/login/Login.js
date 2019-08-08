@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import './login.css';
+
 import AuthService from './../auth/auth-service';
 
 export default class Login extends Component {
@@ -41,8 +43,11 @@ export default class Login extends Component {
 	render() {
 		return (
 			<div className="login-container">
-				<div className="login-wrapper">
-					<form onSubmit={this.handleFormSubmit}>
+				<form onSubmit={this.handleFormSubmit}>
+					<div className="login-wrapper">
+						<div>
+							<h2>Log In</h2>
+						</div>
 						<label>Email:</label>
 						<input
 							type="email"
@@ -61,13 +66,19 @@ export default class Login extends Component {
 								this.handleChange(e);
 							}}
 						/>
-						<button>Log In</button>
-					</form>
-					<p>
-						Don't have account?
-						<Link to={'/signup'}> Signup</Link>
-					</p>
-				</div>
+						<div className='signup-button'>
+							<div className='button-gradient'>
+								<button>Log In</button>
+							</div>
+						</div>
+						<div className="login-login-link">
+							<p>
+								Don't have an account?
+								<Link className='login-login-link-link' to={'/signup'}> Login</Link>
+							</p>
+						</div>
+					</div>
+				</form>
 			</div>
 		);
 	}

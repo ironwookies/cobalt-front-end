@@ -11,13 +11,13 @@ export default function About() {
                 </div>
                 <div className="article-content">
                     <div className="article-section">
-                        <h3>Chat, Collaborate, Share files</h3>
+                        <h3>Keep in touch with friends</h3>
                         <p>
-                            Lorem, ipsum dolor sit amet consectetur adipisicing
-                             elit. Adipisci voluptates, corrupti nemo amet aut 
-                             quisquam obcaecati perferendis laborum voluptatum 
-                             voluptas eligendi quasi aspernatur doloribus veritatis, 
-                             praesentium dicta placeat quidem labore?
+                            Start chatting today, using Cobalt's easy to use
+                            interface! Add frieds to your contacts and start 
+                            chatting. Want to add more friends to your conversation?
+                            Create a group chat and invite all your buds, share whimsical
+                            GIFs and emojis to liven the conversation.
                         </p>
                     </div>
                 </div>
