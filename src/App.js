@@ -17,7 +17,6 @@ class App extends Component {
 		super(props);
 		this.state = {
 			user: null,
-			// ready: false,
 		};
 		this.service = new AuthService();
 	}
@@ -107,10 +106,7 @@ class App extends Component {
 					<Route
 						path="/chat"
 						render={(props) => {
-							this.fetchUser().then(() => {
-								// this.setState({ ready: true });
-							});
-
+							this.fetchUser().then(() => {});
 							if (!!this.state.user) {
 								return <ChatRooms {...props} user={this.state.user} />;
 							} else {

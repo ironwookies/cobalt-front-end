@@ -18,8 +18,7 @@ export default class Chat extends Component {
 			showEmojiPicker: false,
 			message: '',
 			messages: [],
-			// socket: socketIOClient('http://192.168.125.9:3000', {
-			socket: socketIOClient('http://192.168.125.9:3000', {
+			socket: socketIOClient(process.env.SOCKET, {
 				query: { _id: this.props.match.params.id, user: this.props.user._id },
 			}),
 			giphy: false,
@@ -27,7 +26,6 @@ export default class Chat extends Component {
 			room: this.props.match.params.id,
 		};
 		this.service = new AuthService();
-
 		this.state.socket.on('chat message', (data) => {
 			this.addMessage(data);
 		});
