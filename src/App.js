@@ -7,7 +7,7 @@ import ChatRooms from './components/chatGroups';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 
-import giphyAPIkey from './components/giphy/giphyApyKey';
+// import giphyAPIkey from './components/giphy/giphyApyKey';
 
 import './App.css';
 import AuthService from './components/auth/auth-service';
@@ -17,16 +17,14 @@ class App extends Component {
 		super(props);
 		this.state = {
 			user: null,
-			ready: false,
-			key: giphyAPIkey().key,
-			giffs: [],
+			// ready: false,
 		};
 		this.service = new AuthService();
 	}
 
 	componentDidMount() {
-		this.getTrendingGiphy();
 		this.fetchUser();
+		this.getTrendingGiphy();
 	}
 
 	fetchUser = async () => {
@@ -47,6 +45,7 @@ class App extends Component {
 			user: userInfo,
 		});
 	};
+
 	getSearchedGiphy(e) {
 		let search = e.target.value;
 
@@ -108,8 +107,11 @@ class App extends Component {
 					<Route
 						path="/chat"
 						render={(props) => {
-							this.fetchUser().then(() => {});
-							if (this.state.user) {
+							this.fetchUser().then(() => {
+								// this.setState({ ready: true });
+							});
+
+							if (!!this.state.user) {
 								return <ChatRooms {...props} user={this.state.user} />;
 							} else {
 								return (

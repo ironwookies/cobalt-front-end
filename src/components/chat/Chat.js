@@ -18,8 +18,9 @@ export default class Chat extends Component {
 			showEmojiPicker: false,
 			message: '',
 			messages: [],
+			// socket: socketIOClient('http://192.168.125.9:3000', {
 			socket: socketIOClient('http://192.168.125.9:3000', {
-				query: { _id: this.props.match.params.id },
+				query: { _id: this.props.match.params.id, user: this.props.user._id },
 			}),
 			giphy: false,
 			gifs: [],
@@ -38,7 +39,6 @@ export default class Chat extends Component {
 	}
 
 	getTrendingGiphy() {
-		console.log('env variabless', process.env);
 		axios
 			.get(
 				'https://api.giphy.com/v1/gifs/trending?&api_key=' +
