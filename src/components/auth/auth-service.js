@@ -4,7 +4,7 @@ export default class AuthService {
 	constructor() {
 		let token = localStorage.getItem('jwt');
 		let service = axios.create({
-			baseURL: 'http://localhost:3000',
+			baseURL: process.env.REACT_APP_API_URL,
 			timeout: 5000,
 			headers: {
 				Authorization: `Bearer ${token}`,

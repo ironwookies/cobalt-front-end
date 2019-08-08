@@ -5,10 +5,10 @@ import About from '../about/About';
 import Action from '../action/Action';
 import Footer from '../footer/Footer';
 
-export default function Home() {
+export default function Home(props) {
 	return (
 		<div className="home-container">
-			<Navbar></Navbar>
+			<Navbar user={props.user} />
 			<Body />
 			<Action />
 			<About />
