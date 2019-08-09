@@ -4,6 +4,7 @@ import axios from 'axios';
 import ReactTextareaAutocomplete from '@webscopeio/react-textarea-autocomplete';
 import { Picker, emojiIndex } from 'emoji-mart';
 import { Smile } from 'react-feather';
+import AutoScroll from 'react-scroll-to-bottom';
 
 import 'emoji-mart/css/emoji-mart.css';
 
@@ -41,7 +42,7 @@ export default class Chat extends Component {
 			.get(
 				'https://api.giphy.com/v1/gifs/trending?&api_key=' +
 					process.env.REACT_APP_GIPHY_API +
-					'&limit=5',
+					'&limit=10',
 			)
 			.then((res) => {
 				return this.setState({ gifs: this.createGiffs(res.data.data) });
@@ -143,20 +144,19 @@ export default class Chat extends Component {
 			);
 		} else {
 			return (
-				<div>
-					<button
-						type="button"
-						className="toggle-emoji"
-						onClick={this.toggleEmojiPicker}>
-						<Smile />
-					</button>
+				<div className='text-inputs'>
 					<ReactTextareaAutocomplete
-						className="message-input my-textarea"
+						className="text-input__textarea"
 						name="message"
 						value={this.state.message}
 						loadingComponent={() => <span>Loading</span>}
 						onKeyPress={this.inputOnChange}
 						onChange={this.inputOnChange}
+						// containerStyle={{
+						// 	margin: 5,
+						// 	width: 400,
+						// 	height: 50,
+						//   }}
 						placeholder="Compose your message and hit ENTER to send"
 						trigger={{
 							':': {
@@ -173,6 +173,12 @@ export default class Chat extends Component {
 						}}
 					/>
 					<div className="chatarea__input">
+						<button
+							type="button"
+							className="toggle-emoji"
+							onClick={this.toggleEmojiPicker}>
+							<Smile />
+						</button>
 						<button
 							onClick={this.sendMessage}
 							className="btn btn-primary form-control">
@@ -202,14 +208,13 @@ export default class Chat extends Component {
 			this.getTrendingGiphy();
 			return;
 		}
-
 		axios
 			.get(
 				'https://api.giphy.com/v1/gifs/search?q=' +
 					search +
 					'&api_key=' +
 					process.env.REACT_APP_GIPHY_API +
-					'&limit=5',
+					'&limit=10',
 			)
 			.then((res) => {
 				return this.setState({ gifs: this.createGiffs(res.data.data) });
@@ -278,17 +283,18 @@ export default class Chat extends Component {
 			<div className="card">
 				<div className="card-body">
 					<div className="card-title">
-						Global Chat {this.props.match.params.id}
+						<h2>New Conversation</h2>
 					</div>
-					<hr />
-					<div className="messages">{this.renderMessages()}</div>
+					<AutoScroll mode="bottom" className="messages">
+						{this.renderMessages()}
+					</AutoScroll>
 					{this.state.showEmojiPicker ? (
 						<Picker set="emojione" onSelect={this.addEmoji} />
 					) : null}
 				</div>
 				<div className="card-footer">
-					<form
-						className="chatarea"
+					<form 
+						className="chatarea" 
 						onSubmit={(e) => {
 							e.preventDefault();
 						}}>

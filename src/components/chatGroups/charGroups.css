@@ -1,5 +1,9 @@
-.chatgroups__container {
+.chatgroups-container{
+	width: 100vw;
+	height: 100vh;
 	display: flex;
+	justify-content: flex-start;
+	float: left;
 }
 
 .chatgroups__sidebar {
