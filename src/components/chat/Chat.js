@@ -19,7 +19,8 @@ export default class Chat extends Component {
 			showEmojiPicker: false,
 			message: '',
 			messages: [],
-			socket: socketIOClient(process.env.SOCKET, {
+			fetchingHistory: true,
+			socket: socketIOClient(process.env.REACT_APP_SOCKET, {
 				query: { _id: this.props.match.params.id, user: this.props.user._id },
 			}),
 			giphy: false,
@@ -83,7 +84,12 @@ export default class Chat extends Component {
 	};
 
 	renderMessages = () => {
-		if (this.state.messages && this.state.messages.length === 0) {
+		if (
+			// this.state.fetchingHistory ||
+			// !!this.state.messages ||
+			!!this.state.messages &&
+			this.state.messages.length === 0
+		) {
 			return null;
 		} else {
 			return (
@@ -120,7 +126,9 @@ export default class Chat extends Component {
 			this.service
 				.checkRoute(`chat/history/${this.props.match.params.id}`)
 				.then((response) => {
-					this.setState({ messages: response.messages });
+					this.setState({
+						messages: response.messages,
+					});
 				});
 		} catch (error) {}
 	};

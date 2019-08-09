@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 
 import Home from './components/home/Home';
 import ChatRooms from './components/chatGroups';
@@ -23,7 +23,7 @@ class App extends Component {
 
 	componentDidMount() {
 		this.fetchUser();
-		this.getTrendingGiphy();
+		// this.getTrendingGiphy();
 	}
 
 	fetchUser = async () => {
@@ -45,44 +45,44 @@ class App extends Component {
 		});
 	};
 
-	getSearchedGiphy(e) {
-		let search = e.target.value;
+	// getSearchedGiphy(e) {
+	// 	let search = e.target.value;
 
-		if (search === '') {
-			this.getTrendingGiphy();
-			return;
-		}
+	// 	if (search === '') {
+	// 		this.getTrendingGiphy();
+	// 		return;
+	// 	}
 
-		axios
-			.get(
-				'https://api.giphy.com/v1/gifs/search?q=' +
-					search +
-					'&api_key=' +
-					this.state.key +
-					'&limit=10',
-			)
-			.then((res) => {
-				return this.setState({ giffs: this.createGiffs(res.data.data) });
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+	// 	axios
+	// 		.get(
+	// 			'https://api.giphy.com/v1/gifs/search?q=' +
+	// 				search +
+	// 				'&api_key=' +
+	// 				this.state.key +
+	// 				'&limit=10',
+	// 		)
+	// 		.then((res) => {
+	// 			return this.setState({ giffs: this.createGiffs(res.data.data) });
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error);
+	// 		});
+	// }
 
-	getTrendingGiphy() {
-		axios
-			.get(
-				'https://api.giphy.com/v1/gifs/trending?&api_key=' +
-					this.state.key +
-					'&limit=10',
-			)
-			.then((res) => {
-				return this.setState({ giffs: this.createGiffs(res.data.data) });
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+	// getTrendingGiphy() {
+	// 	axios
+	// 		.get(
+	// 			'https://api.giphy.com/v1/gifs/trending?&api_key=' +
+	// 				this.state.key +
+	// 				'&limit=10',
+	// 		)
+	// 		.then((res) => {
+	// 			return this.setState({ giffs: this.createGiffs(res.data.data) });
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error);
+	// 		});
+	// }
 
 	createGiffs(giffs) {
 		return giffs.map((giff, i) => {

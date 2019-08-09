@@ -11,6 +11,7 @@ export default class Login extends Component {
 		this.state = {
 			email: '',
 			password: '',
+			error: null,
 		};
 		this.service = new AuthService();
 	}
@@ -31,13 +32,21 @@ export default class Login extends Component {
 				this.props.history.push('/chat');
 			})
 			.catch((error) => {
-				console.log(error);
+				this.setState({ error: error.response.data.message });
 			});
 	};
 
 	componentWillMount = async () => {
 		if (await this.service.loggedin()) {
 			this.props.history.replace('/');
+		}
+	};
+
+	renderError = () => {
+		if (this.state.error) {
+			return <div className="login-errorMessage">{this.state.error}</div>;
+		} else {
+			return <div className="login-errorMessage-area" />;
 		}
 	};
 
@@ -49,6 +58,7 @@ export default class Login extends Component {
 						<div>
 							<h2>Log In</h2>
 						</div>
+						{this.renderError()}
 						<label>Email:</label>
 						<input
 							type="email"
@@ -67,15 +77,17 @@ export default class Login extends Component {
 								this.handleChange(e);
 							}}
 						/>
-						<div className='signup-button'>
-							<div className='button-gradient'>
+						<div className="signup-button">
+							<div className="button-gradient">
 								<button>Log In</button>
 							</div>
 						</div>
 						<div className="login-login-link">
 							<p>
 								Don't have an account?
-								<Link className='login-login-link-link' to={'/signup'}> Login</Link>
+								<Link className="login-login-link-link" to={'/signup'}>
+									Signup
+								</Link>
 							</p>
 						</div>
 					</div>
