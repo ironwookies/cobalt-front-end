@@ -30,12 +30,18 @@ export default class Navbar extends Component {
 						<div className="links">
 							<ul>
 								<li>
-									<NavLink className="link" exact to={'/chat'}>
-										Chatrooms
-									</NavLink>
+									<div className='nav-button-gradient'>
+										<button>
+											<NavLink className="link" exact to={'/chat/contacts'}>
+												Home
+											</NavLink>
+										</button>
+									</div>
 								</li>
 								<li>
-									<button onClick={this.logoutUser}>Logout</button>
+									<div className='nav-button-gradient'>
+										<button onClick={this.logoutUser}>Log Out</button>
+									</div>
 								</li>
 							</ul>
 						</div>

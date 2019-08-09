@@ -1,0 +1,25 @@
+.no-contacts{
+    color: white;
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 200;
+}
+
+.contacts-wrapper{
+    width: 100%;
+    height: 100%;
+}
+
+.contacts-wrapper  h3{
+    color: white;
+    font-size: 28px;
+    padding: 10px 0px 10px 0px;
+    margin: 0px;
+}
+
+.contacts-wrapper  h5{
+    color: white;
+    font-size: 18px;
+    padding: 10px 0px 10px 20px;
+    margin: 0px;
+}
