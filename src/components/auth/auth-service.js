@@ -13,11 +13,21 @@ export default class AuthService {
 		this.service = service;
 	}
 
-	signup = (email, password) => {
+	signup = (email, password, confirmPassword, firstName, familyName) => {
 		return this.service
-			.post('/signup', { email, password })
+			.post('/signup', {
+				email,
+				password,
+				confirmPassword,
+				firstName,
+				familyName,
+			})
 			.then((response) => {
+				localStorage.setItem('jwt', response.data.token);
 				return response.data;
+			})
+			.catch((error) => {
+				console.log(error);
 			});
 	};
 
@@ -56,9 +66,14 @@ export default class AuthService {
 	};
 
 	postRoute = (route, body) => {
-		return this.service.post(`/${route}`, body).then((response) => {
-			localStorage.setItem('jwt', response.data.token);
-			return response.data;
-		});
+		return this.service
+			.post(`/${route}`, body)
+			.then((response) => {
+				localStorage.setItem('jwt', response.data.token);
+				return response.data;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 }

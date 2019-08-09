@@ -16,8 +16,9 @@ export default class ChatRooms extends Component {
 			chatGroups: [],
 			contacts: [],
 			fullContacts: [],
-			error: [],
-			currentGroup: '',
+			groupContacts: [],
+			groupContactsInfo: [],
+			displayContacts: false,
 		};
 		this.service = new AuthService();
 	}
@@ -31,9 +32,34 @@ export default class ChatRooms extends Component {
 			this.setState({ fullContacts: response });
 		});
 	};
+
 	addToContacts = (id) => {
 		this.service.postRoute(`user/${id}`);
 		this.setState({ contacts: [...this.state.contacts, id] });
+	};
+
+	toogleContacts = () => {
+		this.setState({ displayContacts: !this.state.displayContacts });
+	};
+
+	addToGroup = (id) => {
+		const groupContacts = this.state.fullContacts.filter((user, i) => {
+			return this.state.groupContacts.includes(user._id) || id === user._id;
+		});
+		this.setState({
+			groupContacts: [...new Set([...this.state.groupContacts, id])],
+			groupContactsInfo: groupContacts,
+		});
+	};
+
+	createGroup = () => {
+		this.service.postRoute('/chat', {
+			users: [...new Set([...this.state.groupContacts, this.state.user._id])],
+			name: 'Some name',
+			description: 'Some description',
+			type: 'private',
+		});
+		this.setState({ groupContacts: [] });
 	};
 
 	checkRoom = async (id) => {
@@ -45,10 +71,11 @@ export default class ChatRooms extends Component {
 		} else {
 			let response = await this.service.postRoute('chat', {
 				users: [id, this.state.user._id],
-				name: ' ',
+				name: `Private Chat`,
 				description: ' ',
 				type: 'private',
 			});
+
 			this.props.history.push(`/chat/room/${response.chat._id}`);
 		}
 	};
@@ -77,7 +104,16 @@ export default class ChatRooms extends Component {
 							path="/chat/rooms"
 							render={(props) => {
 								return (
-									<RoomsList {...props} roomsList={this.state.user.chat} />
+									<RoomsList
+										{...props}
+										roomsList={this.state.user.chat}
+										contacts={this.state.user.contacts}
+										addToGroup={this.addToGroup}
+										groupContacts={this.state.groupContactsInfo}
+										displayContacts={this.state.displayContacts}
+										toogleContacts={this.toogleContacts}
+										createGroup={this.createGroup}
+									/>
 								);
 							}}
 						/>

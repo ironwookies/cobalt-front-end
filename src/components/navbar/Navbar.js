@@ -15,7 +15,6 @@ export default class Navbar extends Component {
 	logoutUser = () => {
 		this.service.logout();
 		this.setState({ user: null });
-		// this.props.getUser(null);
 	};
 
 	render() {
@@ -35,7 +34,12 @@ export default class Navbar extends Component {
 									</NavLink>
 								</li>
 								<li>
-									<button onClick={this.logoutUser}>Logout</button>
+									<button
+										onClick={() => {
+											this.logoutUser();
+										}}>
+										Logout
+									</button>
 								</li>
 							</ul>
 						</div>
@@ -53,7 +57,7 @@ export default class Navbar extends Component {
 						<div className="links">
 							<ul>
 								<li>
-									<div className='nav-button-gradient'>
+									<div className="nav-button-gradient">
 										<button>
 											<NavLink className="link" exact to={'/login'}>
 												Log In
@@ -62,7 +66,7 @@ export default class Navbar extends Component {
 									</div>
 								</li>
 								<li>
-								<div className='nav-button-gradient'>
+									<div className="nav-button-gradient">
 										<button>
 											<NavLink className="link" exact to={'/signup'}>
 												Sign Up

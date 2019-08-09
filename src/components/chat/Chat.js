@@ -4,6 +4,7 @@ import axios from 'axios';
 import ReactTextareaAutocomplete from '@webscopeio/react-textarea-autocomplete';
 import { Picker, emojiIndex } from 'emoji-mart';
 import { Smile } from 'react-feather';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 import 'emoji-mart/css/emoji-mart.css';
 
@@ -18,7 +19,8 @@ export default class Chat extends Component {
 			showEmojiPicker: false,
 			message: '',
 			messages: [],
-			socket: socketIOClient(process.env.SOCKET, {
+			fetchingHistory: true,
+			socket: socketIOClient(process.env.REACT_APP_SOCKET, {
 				query: { _id: this.props.match.params.id, user: this.props.user._id },
 			}),
 			giphy: false,
@@ -82,7 +84,12 @@ export default class Chat extends Component {
 	};
 
 	renderMessages = () => {
-		if (this.state.messages && this.state.messages.length === 0) {
+		if (
+			// this.state.fetchingHistory ||
+			// !!this.state.messages ||
+			!!this.state.messages &&
+			this.state.messages.length === 0
+		) {
 			return null;
 		} else {
 			return (
@@ -119,7 +126,9 @@ export default class Chat extends Component {
 			this.service
 				.checkRoute(`chat/history/${this.props.match.params.id}`)
 				.then((response) => {
-					this.setState({ messages: response.messages });
+					this.setState({
+						messages: response.messages,
+					});
 				});
 		} catch (error) {}
 	};
@@ -281,7 +290,9 @@ export default class Chat extends Component {
 						Global Chat {this.props.match.params.id}
 					</div>
 					<hr />
-					<div className="messages">{this.renderMessages()}</div>
+					<ScrollToBottom className="messages" mode="bottom">
+						{this.renderMessages()}
+					</ScrollToBottom>
 					{this.state.showEmojiPicker ? (
 						<Picker set="emojione" onSelect={this.addEmoji} />
 					) : null}
