@@ -95,22 +95,33 @@ export default class Chat extends Component {
 			return (
 				<div>
 					{this.state.messages.map((message, i) => {
+						console.log(message.creator._id === this.state.user._id);
 						if (message.type === 'Image') {
 							return (
-								<div key={i}>
-									<h3>Author: {message.creator.firstName}</h3>
+								<div
+									key={i}
+									className={
+										this.state.user._id === message.creator._id
+											? 'message-container owned-messages'
+											: 'message-container'
+									}>
 									<p>
-										<span>Message:</span>
+										<h5> {message.creator.firstName}</h5>
 										<img src={message.content} alt="gif" />
 									</p>
 								</div>
 							);
 						}
 						return (
-							<div key={i}>
-								<h3>Author: {message.creator.firstName}</h3>
+							<div
+								key={i}
+								className={
+									this.state.user._id === message.creator._id
+										? 'message-container owned-messages'
+										: 'message-container'
+								}>
 								<p>
-									<span>Message:</span>
+									<h5> {message.creator.firstName}</h5>
 									{message.content}
 								</p>
 							</div>
@@ -152,7 +163,7 @@ export default class Chat extends Component {
 			);
 		} else {
 			return (
-				<div className='text-inputs'>
+				<div className="text-inputs">
 					<ReactTextareaAutocomplete
 						className="text-input__textarea"
 						name="message"
@@ -301,8 +312,8 @@ export default class Chat extends Component {
 					) : null}
 				</div>
 				<div className="card-footer">
-					<form 
-						className="chatarea" 
+					<form
+						className="chatarea"
 						onSubmit={(e) => {
 							e.preventDefault();
 						}}>

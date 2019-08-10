@@ -3,12 +3,11 @@ import Contact from '../contact/Contact';
 import './contactList.css';
 
 const ContactList = (props) => {
-
 	const renderContacts = () => {
-		if(props.contacts.length > 0){
+		if (props.contacts.length > 0) {
 			return props.contacts.map((user, i) => {
 				return (
-					<Contact 
+					<Contact
 						key={i}
 						to={`/chat/room/${user._id}`}
 						addChat={() => {
@@ -16,11 +15,12 @@ const ContactList = (props) => {
 						}}
 						online={user.online}
 						firstName={user.firstName}
+						familyName={user.familyName}
 					/>
 				);
 			});
-		}else{
-			return <h5 className='no-contacts'>You have no contacts</h5>;
+		} else {
+			return <h5 className="no-contacts">You have no contacts</h5>;
 		}
 	};
 

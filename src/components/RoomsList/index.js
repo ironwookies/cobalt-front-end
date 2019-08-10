@@ -9,9 +9,12 @@ const RoomsList = (props) => {
 		} else if (props.roomsList) {
 			return props.roomsList.map((room, i) => {
 				return (
-					<div className='list-container'>
-						<NavLink className='list-item' key={i} to={`/chat/room/${room._id}`}>
-							{room.name} - {room.updatedAt}
+					<div className="list-container">
+						<NavLink
+							className="list-item"
+							key={i}
+							to={`/chat/room/${room._id}`}>
+							{room.name}
 						</NavLink>
 					</div>
 				);
@@ -78,7 +81,7 @@ const RoomsList = (props) => {
 		<div className="chatrooms-wrapper">
 			<h3>Chat Rooms</h3>
 			{renderRoomList()}
-			{displayCreateRoom()}
+			{/* {displayCreateRoom()} */}
 		</div>
 	);
 };

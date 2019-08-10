@@ -1,4 +1,4 @@
-.card{
+.card {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -6,11 +6,11 @@
 	align-items: center;
 }
 
-.card-body{
+.card-body {
 	width: 95%;
 }
 
-.card-title h2{
+.card-title h2 {
 	font-size: 22px;
 	font-family: 'Roboto';
 	font-weight: 400;
@@ -22,12 +22,12 @@
 	overflow: scroll;
 	height: 65vh;
 	border-radius: 5px;
-	-webkit-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.75);
-	box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.75);	
+	-webkit-box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
+	box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
 }
 
-.card-footer{
+.card-footer {
 	width: 95%;
 	height: 22vh;
 	display: flex;
@@ -35,7 +35,7 @@
 	align-items: center;
 }
 
-.chatarea{
+.chatarea {
 	width: 100%;
 	height: 23vh;
 	overflow: auto;
@@ -45,7 +45,7 @@
 	width: 80%;
 }
 
-.text-inputs{
+.text-inputs {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -53,7 +53,7 @@
 	align-items: flex-start;
 }
 
-.chatarea__input{
+.chatarea__input {
 	width: 50%;
 	margin: 20px 0px 0px 0px;
 	display: flex;
@@ -61,7 +61,7 @@
 	align-items: center;
 }
 
-.chatarea__input button{
+.chatarea__input button {
 	background: #0496ff;
 	width: 32%;
 	height: 35px;
@@ -77,14 +77,14 @@
 	margin-top: 18px;
 }
 
-.rta{
+.rta {
 	width: 100%;
 	height: 70px;
 	padding: 0px;
 	margin: 15px 0px 0px 0px;
 }
 
-.rta__autocomplete{
+.rta__autocomplete {
 	width: 350px;
 	height: 50px;
 	border-radius: 4px;
@@ -92,11 +92,11 @@
 	margin: -70px 0px 0px 0px;
 }
 
-.rta__autocomplete ul li{
+.rta__autocomplete ul li {
 	list-style: none;
 }
 
-.text-input__textarea{
+.text-input__textarea {
 	width: 98%;
 	height: 98%;
 	border-radius: 4px;
@@ -106,10 +106,19 @@
 	margin: 0px;
 }
 
-.emoji-mart{
+.emoji-mart {
 	position: absolute;
 	margin: -320px 0px 0px 2px;
-	-webkit-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.75);
-	box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.75);
+	-webkit-box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.75);
+}
+
+.message-container {
+	border-bottom: 1px solid grey;
+	padding: 15px;
+}
+
+.owned-messages {
+	text-align: right;
 }
